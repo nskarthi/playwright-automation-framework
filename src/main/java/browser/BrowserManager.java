@@ -12,6 +12,7 @@ public class BrowserManager {
     public Browser browser;
     public BrowserContext browserContext;
     public Page page;
+    public Page.WaitForSelectorOptions options;
 
     public void setUp() {
         System.out.println("Setting up Playwright....");
@@ -23,6 +24,7 @@ public class BrowserManager {
         Browser browser = playwright.chromium().launch(new BrowserType.LaunchOptions().setHeadless(false));
         browserContext = browser.newContext(new Browser.NewContextOptions().setViewportSize(width, height));
         page = browserContext.newPage();
+        options = new Page.WaitForSelectorOptions().setTimeout(10000);
         System.out.println("Playwright setup complete!");
     }
 
