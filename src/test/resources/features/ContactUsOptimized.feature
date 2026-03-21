@@ -1,0 +1,30 @@
+Feature: WebdriverUniversity.com - Contact Us Page
+
+  Background:
+    Given I navigate to the webdriveruniversity homepage
+    When I click on the contact us button
+
+  Scenario: Valid Contact Us form submission
+    And I type "Joe" into the "first name" field
+    And I type "Bloggs" into the "last name" field
+    And I type "joe@test.com" into the "email" field
+    And I type "Testing 123" into the "comment" field
+    And I click on the submit button
+    Then I should be presented with a successful contact us submission message
+
+  Scenario Outline: Invalid Contact Us form submission
+    And I enter "<firstName>" as "first name"
+    And I enter "<lastName>" as "last name"
+    And I enter "<email>" as "email"
+    And I enter "<comment>" as "comment"
+    And I click on the submit button
+    Then I should see the error "<error>"
+
+    Examples:
+
+      | firstName | lastName | email        | comment | error                          |
+      |           | Bloggs   | joe@test.com | Hello   | Error: all fields are required |
+      | Joe       |          | joe@test.com | Hello   | Error: all fields are required |
+      | Joe       | Bloggs   |              | Hello   | Error: all fields are required |
+      | Joe       | Bloggs   | invalid-mail | Hello   | Error: Invalid email address   |
+      | Joe       | Bloggs   | joe@test.com |         | Error: all fields are required |
