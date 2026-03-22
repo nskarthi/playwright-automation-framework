@@ -36,4 +36,11 @@ public class BrowserManager {
         if (playwright != null) playwright.close();
         System.out.println("Playwright teardown complete!");
     }
+
+    public byte[] takeScreenshot() {
+        if (page != null) {
+            return page.screenshot();
+        }
+        return byte[0];
+    }
 }

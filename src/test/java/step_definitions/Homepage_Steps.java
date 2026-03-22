@@ -29,4 +29,13 @@ public class Homepage_Steps {
             browserManager.page.getByRole(AriaRole.LINK, new Page.GetByRoleOptions().setName("CONTACT US Contact Us Form")).click();
         });
     }
+
+    @When("I click on the LOGIN PORTAL link")
+    public void i_click_on_the_login_portal_link() {
+        System.out.println("clicking login portal link");
+        browserManager.page = browserManager.browserContext.waitForPage(() -> {
+            browserManager.page.getByRole(AriaRole.LINK, new Page.GetByRoleOptions().setName("LOGIN PORTAL Login Portal")).click();
+        });
+        browserManager.page.bringToFront();
+    }
 }

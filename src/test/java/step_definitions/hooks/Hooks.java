@@ -1,10 +1,7 @@
 package step_definitions.hooks;
 
 import browser.BrowserManager;
-import io.cucumber.java.After;
-import io.cucumber.java.AfterAll;
-import io.cucumber.java.Before;
-import io.cucumber.java.BeforeAll;
+import io.cucumber.java.*;
 
 public class Hooks {
     private final BrowserManager browserManager;
@@ -25,7 +22,11 @@ public class Hooks {
     }
 
     @After
-    public void teardown() {
+    public void teardown(Scenario scenario) {
+        if(scenario.isFailed()) {
+            byte[] screenshot = browserManager.takeScreenshot();
+            scenario.attach(screenshot, "image/png", scenario.getName());
+        }
         System.out.println("\nFinished executing the test case!");
         browserManager.tearDown();
     }
