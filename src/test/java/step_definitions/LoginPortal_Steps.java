@@ -18,25 +18,25 @@ public class LoginPortal_Steps {
     @And("I type a username {string}")
     public void i_type_as_username(String inputValue) {
         System.out.println("Entering Username: " + inputValue);
-        browserManager.page.getByPlaceholder("Username").fill(inputValue);
+        browserManager.getPage().getByPlaceholder("Username").fill(inputValue);
     }
 
     @And("I type a password {string}")
     public void i_type_as_password(String inputValue) {
         System.out.println("Entering Password: " + inputValue);
-        browserManager.page.getByPlaceholder("Password").fill(inputValue);
+        browserManager.getPage().getByPlaceholder("Password").fill(inputValue);
     }
 
     @And("I click on the login button")
     public void i_click_on_the_login_button() throws InterruptedException {
         System.out.println("Clicking Login button");
-        browserManager.page.onceDialog(dialog -> {
+        browserManager.getPage().onceDialog(dialog -> {
             alertText = dialog.message();
             System.out.println(alertText);
             dialog.accept();
         });
 
-        Locator loginButton = browserManager.page.locator("#login-button");
+        Locator loginButton = browserManager.getPage().locator("#login-button");
         loginButton.hover();
         loginButton.click(new Locator.ClickOptions().setForce(true));
     }

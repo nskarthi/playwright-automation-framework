@@ -38,7 +38,7 @@ public class ContactUsOptimized_Steps {
     public void i_enter_as(String inputValue, String fieldName) {
         if (inputValue != null && !inputValue.trim().isEmpty()) {
             String selector = mapFieldToName(fieldName);
-            browserManager.page.getByPlaceholder(selector).fill(inputValue);
+            browserManager.getPage().getByPlaceholder(selector).fill(inputValue);
         } else {
             System.out.println("Skipping field: " + fieldName + " (value was empty)");
         }
@@ -48,7 +48,7 @@ public class ContactUsOptimized_Steps {
     public void i_type_into_the_field(String inputValue, String fieldName) {
         if (inputValue != null && !inputValue.trim().isEmpty()) {
             String selector = mapFieldToName(fieldName);
-            browserManager.page.getByPlaceholder(selector).fill(inputValue);
+            browserManager.getPage().getByPlaceholder(selector).fill(inputValue);
         } else {
             System.out.println("Skipping field: " + fieldName + " (value was empty)");
         }
@@ -56,7 +56,7 @@ public class ContactUsOptimized_Steps {
 
     @Then("I should see the error {string}")
     public void i_should_see_the_error(String expectedError) {
-        Locator errorElement = browserManager.page.locator(errorSelector);
+        Locator errorElement = browserManager.getPage().locator(errorSelector);
         System.out.println("Error page text: " + errorElement.textContent());
         assertThat(errorElement).isVisible();
         assertThat(errorElement).containsText(expectedError);
@@ -75,7 +75,7 @@ public class ContactUsOptimized_Steps {
         String selector = fieldMap.get("first name");
         String inputValue = faker.name().firstName();
         System.out.println("Random firstname: " + inputValue);
-        browserManager.page.getByPlaceholder(selector).fill(inputValue);
+        browserManager.getPage().getByPlaceholder(selector).fill(inputValue);
     }
 
     @And("I type a random last name")
@@ -83,7 +83,7 @@ public class ContactUsOptimized_Steps {
         String selector = fieldMap.get("last name");
         String inputValue = faker.name().lastName();
         System.out.println("Random lastname: " + inputValue);
-        browserManager.page.getByPlaceholder(selector).fill(inputValue);
+        browserManager.getPage().getByPlaceholder(selector).fill(inputValue);
     }
 
     @And("I type a random email")
@@ -91,7 +91,7 @@ public class ContactUsOptimized_Steps {
         String selector = fieldMap.get("email");
         String inputValue = faker.internet().emailAddress();
         System.out.println("Random email: " + inputValue);
-        browserManager.page.getByPlaceholder(selector).fill(inputValue);
+        browserManager.getPage().getByPlaceholder(selector).fill(inputValue);
     }
 
     @And("I type a random comment")
@@ -99,6 +99,6 @@ public class ContactUsOptimized_Steps {
         String selector = fieldMap.get("comment");
         String inputValue = faker.strangerThings().quote();
         System.out.println("Random comment: " + inputValue);
-        browserManager.page.getByPlaceholder(selector).fill(inputValue);
+        browserManager.getPage().getByPlaceholder(selector).fill(inputValue);
     }
 }

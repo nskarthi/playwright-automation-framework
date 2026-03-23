@@ -28,49 +28,49 @@ public class ContactUs_Steps {
     @When("I type a first name")
     public void i_type_a_first_name() {
         System.out.println("firstname");
-        browserManager.page.getByPlaceholder("First Name").fill("Sam");
+        browserManager.getPage().getByPlaceholder("First Name").fill("Sam");
     }
 
     @When("I type a last name")
     public void i_type_a_last_name() {
         System.out.println("lastname");
-        browserManager.page.getByPlaceholder("Last Name").fill("Curran");
+        browserManager.getPage().getByPlaceholder("Last Name").fill("Curran");
     }
 
     @When("I type an email address")
     public void i_type_an_email_address() {
         System.out.println("email");
-        browserManager.page.getByPlaceholder("Email Address").fill("sam_curran@gmail.com");
+        browserManager.getPage().getByPlaceholder("Email Address").fill("sam_curran@gmail.com");
     }
 
     @When("I type a comment")
     public void i_type_a_comment() {
         System.out.println("comments");
-        browserManager.page.getByPlaceholder("Comments").fill("My comments");
+        browserManager.getPage().getByPlaceholder("Comments").fill("My comments");
     }
 
     @When("I click on the submit button")
     public void i_click_on_the_submit_button() {
         System.out.println("submit");
-        browserManager.page.waitForSelector(submitSelector, browserManager.options);
-        browserManager.page.click(submitSelector);
+        browserManager.getPage().waitForSelector(submitSelector, browserManager.options);
+        browserManager.getPage().click(submitSelector);
     }
 
     @Then("I should be presented with a successful contact us submission message")
     public void i_should_be_presented_with_a_successful_contact_us_submission_message() {
         System.out.println("thank you page");
         String thankYouMessage = "Thank You for your Message!";
-        browserManager.page.waitForSelector(thankYouSelector, browserManager.options);
-        String text = browserManager.page.waitForSelector(thankYouSelector).textContent();
+        browserManager.getPage().waitForSelector(thankYouSelector, browserManager.options);
+        String text = browserManager.getPage().waitForSelector(thankYouSelector).textContent();
         System.out.println("Thank you page text: " + text);
-        assertThat(browserManager.page.locator(thankYouSelector)).hasText(thankYouMessage);
+        assertThat(browserManager.getPage().locator(thankYouSelector)).hasText(thankYouMessage);
     }
 
     @Then("I should be presented with an error page for missing email address")
     public void i_should_be_presented_with_an_error_page_for_missing_email_address(DataTable dataTable) {
         System.out.println("unsuccessful submission error page");
         List<String> expectedErrors = dataTable.asList();
-        Locator errorElement = browserManager.page.locator(errorSelector);
+        Locator errorElement = browserManager.getPage().locator(errorSelector);
         String actualErrorMessage = errorElement.textContent();
         System.out.println("Error page text: " + errorElement.textContent());
         assertThat(errorElement).isVisible();
@@ -89,7 +89,7 @@ public class ContactUs_Steps {
     public void i_should_be_presented_with_an_error_page_for_missing_first_name(String field, DataTable dataTable) {
         System.out.println("unsuccessful submission error page");
         List<String> expectedErrors = dataTable.asList();
-        Locator errorElement = browserManager.page.locator(errorSelector);
+        Locator errorElement = browserManager.getPage().locator(errorSelector);
         System.out.println("Error page text: " + errorElement.textContent());
         assertThat(errorElement).isVisible();
         assertThat(errorElement).containsText(FIELDS_REQUIRED_ERROR);
