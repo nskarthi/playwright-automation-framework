@@ -5,37 +5,37 @@ import com.microsoft.playwright.*;
 import com.microsoft.playwright.options.AriaRole;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.When;
+import org.testng.internal.annotations.BaseAnnotation;
+import pages.HomePage;
+import pages.base.BasePage;
 
 import java.awt.*;
 
 public class Homepage_Steps {
 
     public BrowserManager browserManager;
+    private final HomePage homePage;
 
-    public Homepage_Steps(BrowserManager browserManager) {
+    public Homepage_Steps(BrowserManager browserManager, HomePage homePage) {
         this.browserManager = browserManager;
+        this.homePage = homePage;
     }
 
     @Given("I navigate to the webdriveruniversity homepage")
     public void i_navigate_to_the_webdriveruniversity_homepage() {
         System.out.println("landing in homepage");
-        browserManager.page.navigate("https://webdriveruniversity.com/");
+        homePage.navigateToHomePage();
     }
 
     @When("I click on the contact us button")
     public void i_click_on_the_contact_us_button() {
         System.out.println("clicking contact us");
-        browserManager.page = browserManager.browserContext.waitForPage(() -> {
-            browserManager.page.getByRole(AriaRole.LINK, new Page.GetByRoleOptions().setName("CONTACT US Contact Us Form")).click();
-        });
+        homePage.clickContactUsLink();
     }
 
     @When("I click on the LOGIN PORTAL link")
     public void i_click_on_the_login_portal_link() {
         System.out.println("clicking login portal link");
-        browserManager.page = browserManager.browserContext.waitForPage(() -> {
-            browserManager.page.getByRole(AriaRole.LINK, new Page.GetByRoleOptions().setName("LOGIN PORTAL Login Portal")).click();
-        });
-        browserManager.page.bringToFront();
+        homePage.clickLoginPortalLink();
     }
 }

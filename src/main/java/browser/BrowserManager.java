@@ -16,10 +16,10 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 public class BrowserManager {
-    public Playwright playwright;
-    public Browser browser;
-    public BrowserContext browserContext;
-    public Page page;
+    private static final ThreadLocal<Playwright> playwright = new ThreadLocal<>();
+    private static final ThreadLocal<Browser> browser = new ThreadLocal<>();
+    private static final ThreadLocal<BrowserContext> browserContext = new ThreadLocal<>();
+    private static final ThreadLocal<Page> page = new ThreadLocal<>();
     public Page.WaitForSelectorOptions options;
     public Properties properties;
 
@@ -29,9 +29,9 @@ public class BrowserManager {
         properties = new Properties();
         Path configPath = Paths.get(System.getProperty("config.path",
                 Paths.get(System.getProperty("user.dir"), "src", "main", "resources", "config.properties").toString()));
-        try(InputStream input= Files.newInputStream(configPath)) {
+        try (InputStream input = Files.newInputStream(configPath)) {
             properties.load(input);
-        } catch(IOException e) {
+        } catch (IOException e) {
             logger.log(Level.SEVERE, "Failed to load properties file", e);
         }
     }
@@ -43,37 +43,62 @@ public class BrowserManager {
         int width = (int) screenSize.getWidth();
         int height = (int) screenSize.getHeight();
 
-        Playwright playwright = Playwright.create();
-        switch (browserType.toUpperCase()) {
-            case "CHROMIUM":
-                browser = playwright.chromium().launch(new BrowserType.LaunchOptions().setHeadless(false));
-                break;
-            case "FIREFOX":
-                browser = playwright.firefox().launch(new BrowserType.LaunchOptions().setHeadless(false));
-                break;
-            default:
-                logger.warning("Unsupported browser type: " + browserType + ". Defaulting to chromium");
-                browser = playwright.chromium().launch(new BrowserType.LaunchOptions().setHeadless(false));
-                break;
+        try {
+            playwright.set(Playwright.create());
+            switch (browserType.toUpperCase()) {
+                case "CHROMIUM":
+                    browser.set(playwright.get().chromium().launch(new BrowserType.LaunchOptions().setHeadless(false)));
+                    break;
+                case "FIREFOX":
+                    browser.set(playwright.get().firefox().launch(new BrowserType.LaunchOptions().setHeadless(false)));
+                    break;
+                default:
+                    logger.warning("Unsupported browser type: " + browserType + ". Defaulting to chromium");
+                    browser.set(playwright.get().chromium().launch(new BrowserType.LaunchOptions().setHeadless(false)));
+                    break;
+            }
+            browserContext.set(browser.get().newContext(new Browser.NewContextOptions().setViewportSize(width, height)));
+            page.set(browserContext.get().newPage());
+            options = new Page.WaitForSelectorOptions().setTimeout(10000);
+        } catch (Exception e) {
+            logger.log(Level.SEVERE, "Failed to setup Playwright!", e);
+            throw new RuntimeException(e);
         }
-        browserContext = browser.newContext(new Browser.NewContextOptions().setViewportSize(width, height));
-        page = browserContext.newPage();
-        options = new Page.WaitForSelectorOptions().setTimeout(10000);
         logger.info("Playwright setup complete!");
+    }
+
+    public Page getPage() {
+        return page.get();
+    }
+
+    public void setPage(Page newPage) {
+        page.set(newPage);
+    }
+
+    public BrowserContext getBrowserContext() {
+        return browserContext.get();
+    }
+
+    public void setBrowserContext(BrowserContext context) {
+        browserContext.set(context);
     }
 
     public void tearDown() {
         logger.info("Tearing down Playwright...");
-        if (page != null) page.close();
-        if (browserContext != null) browserContext.close();
-        if (browser != null) browser.close();
-        if (playwright != null) playwright.close();
+        try {
+            if (page.get() != null) page.get().close();
+            if (browserContext.get() != null) browserContext.get().close();
+            if (browser.get() != null) browser.get().close();
+            if (playwright.get() != null) playwright.get().close();
+        } catch (Exception e) {
+            logger.log(Level.SEVERE, "Failed to close Playwright resources!!", e);
+        }
         logger.info("Playwright teardown complete!");
     }
 
     public byte[] takeScreenshot() {
-        if (page != null) {
-            return page.screenshot((new Page.ScreenshotOptions().setFullPage(true)));
+        if (page.get() != null) {
+            return page.get().screenshot((new Page.ScreenshotOptions().setFullPage(true)));
         }
         return new byte[0];
     }
