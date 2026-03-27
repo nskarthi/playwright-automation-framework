@@ -4,7 +4,7 @@ Feature: WebdriverUniversity.com - Contact Us Page
     Given I navigate to the webdriveruniversity homepage
     When I click on the contact us button
 
-  @regression, @smoke
+  @regression, @smoke, @contact-us-optimized
   Scenario: Valid Contact Us form submission via optimized feature file
     And I type "Joe" into the "first name" field
     And I type "Bloggs" into the "last name" field
@@ -13,7 +13,7 @@ Feature: WebdriverUniversity.com - Contact Us Page
     And I click on the submit button
     Then I should be presented with a successful contact us submission message
 
-  @smoke, @fix
+  @smoke, @contact-us-optimized, @fix
   Scenario: Valid Contact Us form submission via optimized feature file - Using Random Data
     And I type a random first name
     And I type a random last name
@@ -22,7 +22,7 @@ Feature: WebdriverUniversity.com - Contact Us Page
     And I click on the submit button
     Then I should be presented with a successful contact us submission message
 
-  @regression
+  @regression, @contact-us-optimized
   Scenario Outline: Invalid Contact Us form submission via optimized feature file
     And I enter "<firstName>" as "first name"
     And I enter "<lastName>" as "last name"

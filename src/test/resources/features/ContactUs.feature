@@ -1,6 +1,11 @@
 Feature: WebdriverUniversity.com - Contact Us Page
 
-  @smoke, @fix
+  @skip, @contact-us
+  Scenario: Successful navigation to Contact Us form submission page
+    Given I navigate to the webdriveruniversity homepage
+    When I click on the contact us button
+
+  @smoke, @contact-us
   Scenario: Valid Contact Us form submission
     Given I navigate to the webdriveruniversity homepage
     When I click on the contact us button
@@ -11,7 +16,7 @@ Feature: WebdriverUniversity.com - Contact Us Page
     And I click on the submit button
     Then I should be presented with a successful contact us submission message
 
-  @regression, @fix
+  @regression, @contact-us
   Scenario: Invalid Contact Us form submission without email address
     Given I navigate to the webdriveruniversity homepage
     When I click on the contact us button
@@ -24,7 +29,7 @@ Feature: WebdriverUniversity.com - Contact Us Page
       | Error: all fields are required |
       | Error: Invalid email address   |
 
-  @regression
+  @regression, @contact-us
   Scenario: Invalid Contact Us form submission without first name
     Given I navigate to the webdriveruniversity homepage
     When I click on the contact us button
@@ -36,7 +41,7 @@ Feature: WebdriverUniversity.com - Contact Us Page
     Then I should be presented with an error page for missing "first name"
       | Error: all fields are required |
 
-  @regression
+  @regression, @contact-us
   Scenario: Invalid Contact Us form submission without last name
     Given I navigate to the webdriveruniversity homepage
     When I click on the contact us button
@@ -48,7 +53,7 @@ Feature: WebdriverUniversity.com - Contact Us Page
     Then I should be presented with an error page for missing "last name"
       | Error: all fields are required |
 
-  @regression
+  @regression, @contact-us
   Scenario: Invalid Contact Us form submission without comments
     Given I navigate to the webdriveruniversity homepage
     When I click on the contact us button
